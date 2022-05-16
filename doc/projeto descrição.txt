@@ -1,0 +1,37 @@
+Desenvolver uma API
+
+Cadastro de produtos
+
+1 - Cadastrar Produto
+2 - Listar Produtos
+3 - Editar Produtos
+4 - Remover Produto
+
+
+Todas as interações devem ser feitas via API Rest
+
+
+0 - O Sistema deve apresnetar uma tela de boas vindas.
+
+
+1 - Cadastro de produto
+
+ 	O aramazenamento de produto tem que ter os seguintes campos
+
+	Id, Nome, Código, Valor, DataC, DataU
+
+2 - O sistema deve aprensetar uma tela com uma tabela de produtos
+
+	A tabela deve ter os seguintes campos
+
+	Id, Nome, Código, Valor
+
+3 - Para editar um produto deve apresentar os seguintes campos
+
+	Nome, Código, Valor
+	Não pode atualizar os demias campos como Id, DataC,
+	Atualizar automaticamente o campo, DataU
+
+4 - O sistema deve apresentar um botão para deletar um produto
+
+
