@@ -29,3 +29,9 @@ func (p Produto) String() string {
 
 	return string(data)
 }
+
+func NewProduto() *Produto {
+	return &Produto{
+		CreatedAt: "18-05-2022 18:50:00",
+	}
+}

@@ -3,32 +3,31 @@ package main
 import (
 	"fmt"
 
-	"github.com/faelp22/tcs_curso/stoq/entity"
+	"github.com/faelp22/tcs_curso/stoq/config"
 )
-
-type Computador string
-
-func (c Computador) Ligar() string {
-	return "Ligando ....."
-}
 
 func main() {
 
-	p1 := entity.Produto{
-		ID:        1,
-		Name:      "PS5",
-		Code:      "ASDF",
-		Price:     5000,
-		CreatedAt: "16/05/22 19:00:00",
-		UpdatedAt: "16/05/22 19:00:00",
-	}
+	config := config.NewConfig("8080", config.DBConfig{
+		DB_DRIVE: "sqlite",
+		// DB_HOST:  "192.168.0.100",
+		// DB_PORT:  "5432",
+		// DB_USER:  "root",
+		// DB_PASS:  "123456",
+		DB_NAME: "stoq.sqlite3",
+	}, false)
 
-	var pc1 Computador
+	fmt.Println(config.DB_DSN)
 
-	pc1 = "Dell"
+	// p1 := entity.Produto{
+	// 	ID:        1,
+	// 	Name:      "PS5",
+	// 	Code:      "ASDF",
+	// 	Price:     5000,
+	// 	CreatedAt: "16/05/22 19:00:00",
+	// 	UpdatedAt: "16/05/22 19:00:00",
+	// }
 
-	fmt.Println(pc1.Ligar())
-
-	fmt.Println(p1.String())
+	// fmt.Println(p1.String())
 
 }
