@@ -30,16 +30,20 @@ func NewConfig(SRV_PORT string, db_config DBConfig, WEB_UI bool) *Config {
 
 	if db_config.DB_DRIVE != "" {
 		conf.DB_DRIVE = db_config.DB_DRIVE
+	} else {
+		conf.DB_DRIVE = "sqlite3"
 	}
 
 	if db_config.DB_NAME != "" {
 		conf.DB_NAME = db_config.DB_NAME
+	} else {
+		conf.DB_NAME = "stoq"
 	}
 
 	conf.WEB_UI = WEB_UI
 
 	switch conf.DB_DRIVE {
-	case "sqlite":
+	case "sqlite3":
 		conf.DB_DSN = fmt.Sprintf(conf.DB_NAME)
 
 	case "postgresql":

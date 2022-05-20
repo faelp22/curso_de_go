@@ -5,19 +5,34 @@ import (
 	"log"
 
 	"github.com/faelp22/tcs_curso/stoq/config"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
-func NewDB(conf *config.Config) *sql.DB {
-	db, err := sql.Open(conf.DB_DRIVE, conf.DB_DSN)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
+type dabase_pool struct {
+	DB *sql.DB
+}
 
-	err = db.Ping()
-	if err != nil {
-		log.Fatal(err)
+func NewDB(conf *config.Config) (dbpool *dabase_pool) {
+
+	if dbpool != nil {
+		return dbpool
+	} else {
+		db, err := sql.Open("sqlite3", conf.DB_DSN)
+		if err != nil {
+			log.Fatal(err)
+		}
+		// defer db.Close()
+
+		err = db.Ping()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		dbpool = &dabase_pool{
+			DB: db,
+		}
 	}
 
-	return db
+	return dbpool
 }
