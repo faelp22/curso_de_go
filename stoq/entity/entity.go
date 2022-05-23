@@ -14,8 +14,12 @@ type Produto struct {
 	Name      string  `json:"name"`
 	Code      string  `json:"code"`
 	Price     float64 `json:"price"`
-	CreatedAt string  `json:"created_at"`
-	UpdatedAt string  `json:"updated_at"`
+	CreatedAt string  `json:"created_at,omitempty"`
+	UpdatedAt string  `json:"updated_at,omitempty"`
+}
+
+type ProdutoList struct {
+	List []*Produto `json:"list"`
 }
 
 func (p Produto) String() string {

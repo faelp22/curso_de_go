@@ -9,16 +9,26 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+type DatabaseInterface interface {
+	GetDB() (DB *sql.DB)
+	Close() error
+}
+
 type dabase_pool struct {
 	DB *sql.DB
 }
 
-func NewDB(conf *config.Config) (dbpool *dabase_pool) {
+var dbpool = &dabase_pool{}
 
-	if dbpool != nil {
+func NewDB(conf *config.Config) *dabase_pool {
+
+	if dbpool != nil && dbpool.DB != nil {
+
 		return dbpool
+
 	} else {
-		db, err := sql.Open("sqlite3", conf.DB_DSN)
+
+		db, err := sql.Open(conf.DB_DRIVE, conf.DB_DSN)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -35,4 +45,20 @@ func NewDB(conf *config.Config) (dbpool *dabase_pool) {
 	}
 
 	return dbpool
+}
+
+func (d *dabase_pool) Close() error {
+
+	err := d.DB.Close()
+	if err != nil {
+		return err
+	}
+
+	dbpool = &dabase_pool{}
+
+	return err
+}
+
+func (dbp *dabase_pool) GetDB() (DB *sql.DB) {
+	return dbp.DB
 }
