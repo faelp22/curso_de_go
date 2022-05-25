@@ -18,10 +18,6 @@ type Produto struct {
 	UpdatedAt string  `json:"updated_at,omitempty"`
 }
 
-type ProdutoList struct {
-	List []*Produto `json:"list"`
-}
-
 func (p Produto) String() string {
 	data, err := json.Marshal(p)
 
@@ -34,8 +30,26 @@ func (p Produto) String() string {
 	return string(data)
 }
 
-func NewProduto() *Produto {
+type ProdutoList struct {
+	List []*Produto `json:"list"`
+}
+
+func (pl ProdutoList) String() string {
+	data, err := json.Marshal(pl)
+
+	if err != nil {
+		log.Println("error to convert ProdutoList to JSON")
+		log.Println(err.Error())
+		return ""
+	}
+
+	return string(data)
+}
+
+func NewProduto(nome, code string, price float64) *Produto {
 	return &Produto{
-		CreatedAt: "18-05-2022 18:50:00",
+		Name:  nome,
+		Code:  code,
+		Price: price,
 	}
 }

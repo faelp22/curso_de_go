@@ -7,9 +7,10 @@ import (
 	"time"
 
 	"github.com/faelp22/tcs_curso/stoq/config"
+	"github.com/urfave/negroni"
 )
 
-func NewHTTPServer(conf *config.Config) {
+func NewHTTPServer(conf *config.Config, n *negroni.Negroni) {
 
 	srv := &http.Server{
 		ReadTimeout:  30 * time.Second,
@@ -23,7 +24,5 @@ func NewHTTPServer(conf *config.Config) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	// return &srv
 
 }

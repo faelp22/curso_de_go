@@ -10,9 +10,10 @@ import (
 
 type ProdutoServiceInterface interface {
 	GetAll() *entity.ProdutoList
-	Get(ID int) *entity.Produto
-	Put(produto *entity.Produto) (ok bool)
-	Delete(ID int) (ok bool)
+	GetByID(ID int64) *entity.Produto
+	Create(produto *entity.Produto) int64
+	Update(produto *entity.Produto) int64
+	Delete(ID int64) int64
 }
 
 type produto_service struct {
@@ -26,7 +27,6 @@ func NewProdutoService(dabase_pool database.DatabaseInterface) *produto_service 
 }
 
 func (ps *produto_service) GetAll() *entity.ProdutoList {
-
 	DB := ps.dbp.GetDB()
 
 	rows, err := DB.Query("select id, name, code, price from tb_produto limit 100;")
@@ -50,25 +50,93 @@ func (ps *produto_service) GetAll() *entity.ProdutoList {
 	}
 
 	return lista_produtos
-
 }
 
-func Get(dabase_pool database.DatabaseInterface) {
-	DB := dabase_pool.GetDB()
+func (ps *produto_service) GetByID(ID int64) *entity.Produto {
+	DB := ps.dbp.GetDB()
 
-	stmt, err := DB.Prepare("select id, name from tb_produto where id = ? AND name = ?")
+	stmt, err := DB.Prepare("SELECT id, name, code, price FROM tb_produto WHERE id = ?;")
 	if err != nil {
 		log.Println(err.Error())
 	}
 
 	defer stmt.Close()
 
-	prod := entity.Produto{}
+	p := entity.Produto{}
 
-	err = stmt.QueryRow(3, "notebook").Scan(&prod.ID, &prod.Name)
+	err = stmt.QueryRow(ID).Scan(&p.ID, &p.Name, &p.Code, &p.Price)
 	if err != nil {
 		log.Println(err.Error())
 	}
 
-	fmt.Printf("Produto ID %d Name %v \n", prod.ID, prod.Name)
+	return &p
+}
+
+func (ps *produto_service) Create(produto *entity.Produto) int64 {
+	DB := ps.dbp.GetDB()
+
+	stmt, err := DB.Prepare("INSERT INTO tb_produto (name, code, price) VALUES (?, ?, ?);")
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	defer stmt.Close()
+
+	result, err := stmt.Exec(produto.Name, produto.Code, produto.Price)
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	lastId, err := result.LastInsertId()
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	return lastId
+}
+
+func (ps *produto_service) Update(produto *entity.Produto) int64 {
+	DB := ps.dbp.GetDB()
+
+	stmt, err := DB.Prepare("UPDATE tb_produto SET name = ?, code = ?, price = ? WHERE id = ?;")
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	defer stmt.Close()
+
+	result, err := stmt.Exec(produto.Name, produto.Code, produto.Price, produto.ID)
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	rowsaff, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	return rowsaff
+}
+
+func (ps *produto_service) Delete(ID int64) int64 {
+	DB := ps.dbp.GetDB()
+
+	stmt, err := DB.Prepare("DELETE FROM tb_produto WHERE id = ?;")
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	defer stmt.Close()
+
+	result, err := stmt.Exec(ID)
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	rowsaff, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	return rowsaff
 }

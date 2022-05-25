@@ -5,6 +5,8 @@ Cadastro de produtos
 1 - Cadastrar Produto
 2 - Listar Produtos
 3 - Editar Produtos
+	3.1 Buscar um produto
+	3.2 Editar o produto
 4 - Remover Produto
 
 
