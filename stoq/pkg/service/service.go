@@ -10,10 +10,10 @@ import (
 
 type ProdutoServiceInterface interface {
 	GetAll() *entity.ProdutoList
-	GetByID(ID int64) *entity.Produto
+	GetByID(ID *int64) *entity.Produto
 	Create(produto *entity.Produto) int64
-	Update(produto *entity.Produto) int64
-	Delete(ID int64) int64
+	Update(ID *int64, produto *entity.Produto) int64
+	Delete(ID *int64) int64
 }
 
 type produto_service struct {
@@ -52,7 +52,7 @@ func (ps *produto_service) GetAll() *entity.ProdutoList {
 	return lista_produtos
 }
 
-func (ps *produto_service) GetByID(ID int64) *entity.Produto {
+func (ps *produto_service) GetByID(ID *int64) *entity.Produto {
 	DB := ps.dbp.GetDB()
 
 	stmt, err := DB.Prepare("SELECT id, name, code, price FROM tb_produto WHERE id = ?;")
@@ -95,7 +95,7 @@ func (ps *produto_service) Create(produto *entity.Produto) int64 {
 	return lastId
 }
 
-func (ps *produto_service) Update(produto *entity.Produto) int64 {
+func (ps *produto_service) Update(ID *int64, produto *entity.Produto) int64 {
 	DB := ps.dbp.GetDB()
 
 	stmt, err := DB.Prepare("UPDATE tb_produto SET name = ?, code = ?, price = ? WHERE id = ?;")
@@ -105,7 +105,7 @@ func (ps *produto_service) Update(produto *entity.Produto) int64 {
 
 	defer stmt.Close()
 
-	result, err := stmt.Exec(produto.Name, produto.Code, produto.Price, produto.ID)
+	result, err := stmt.Exec(produto.Name, produto.Code, produto.Price, ID)
 	if err != nil {
 		log.Println(err.Error())
 	}
@@ -118,7 +118,7 @@ func (ps *produto_service) Update(produto *entity.Produto) int64 {
 	return rowsaff
 }
 
-func (ps *produto_service) Delete(ID int64) int64 {
+func (ps *produto_service) Delete(ID *int64) int64 {
 	DB := ps.dbp.GetDB()
 
 	stmt, err := DB.Prepare("DELETE FROM tb_produto WHERE id = ?;")

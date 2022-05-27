@@ -1,12 +1,12 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
+
 	"github.com/faelp22/tcs_curso/stoq/config"
-	"github.com/faelp22/tcs_curso/stoq/handler"
 	"github.com/faelp22/tcs_curso/stoq/pkg/database"
-	"github.com/faelp22/tcs_curso/stoq/pkg/http"
 	"github.com/faelp22/tcs_curso/stoq/pkg/service"
-	"github.com/urfave/negroni"
 )
 
 func main() {
@@ -23,7 +23,12 @@ func main() {
 	dbpool := database.NewDB(config)
 	service := service.NewProdutoService(dbpool)
 
-	n := negroni.Classic()
-	handler.NewRouter(n, service)
-	http.NewHTTPServer(config)
+	lista_produtos := service.GetAll()
+
+	dados, err := json.Marshal(lista_produtos)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	fmt.Println(string(dados))
 }

@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS tb_produto (
     created_at DATETIME        NOT NULL
                                DEFAULT (datetime('now', 'localtime')),
     updated_at DATETIME        NOT NULL
-                               DEFAULT (datetime('now', 'localtime')) 
+                               DEFAULT (datetime('now', 'localtime'))
 );
 
 CREATE TRIGGER IF NOT EXISTS tb_produto_updated_at_trig
