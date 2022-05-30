@@ -18,7 +18,7 @@ func main() {
 		// DB_USER:  "root",
 		// DB_PASS:  "123456",
 		DB_NAME: "db.sqlite3",
-	}, false)
+	})
 
 	dbpool := database.NewDB(config)
 	service := service.NewProdutoService(dbpool)

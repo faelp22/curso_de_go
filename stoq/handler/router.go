@@ -1,20 +1,33 @@
 package handler
 
 import (
-	"net/http"
-
 	"github.com/faelp22/tcs_curso/stoq/pkg/service"
 	"github.com/gorilla/mux"
 	"github.com/urfave/negroni"
 )
 
-func NewRouter(n *negroni.Negroni, service service.ProdutoServiceInterface) {
-	mux := mux.NewRouter()
-	mux.Handle("/products/", getAllProduct(service)).Methods("GET")
-	mux.Handle("/product/{id}", getProduct(service)).Methods("GET")
-	mux.Handle("/product", createProduct(service)).Methods("POST")
-	mux.Handle("/product/{id}", updateProduct(service)).Methods("PUT")
-	mux.Handle("/product/{id}", deleteProduct(service)).Methods("DELETE")
-	n.UseHandler(mux)
-	http.Handle("/", n)
+func RegisterAPIHandlers(r *mux.Router, n *negroni.Negroni, service service.ProdutoServiceInterface) {
+
+	api := r.PathPrefix("/api/v1").Subrouter()
+
+	api.Handle("/products", n.With(
+		negroni.Wrap(getAllProduct(service)),
+	)).Methods("GET", "OPTIONS")
+
+	api.Handle("/product/{id}", n.With(
+		negroni.Wrap(getProduct(service)),
+	)).Methods("GET", "OPTIONS")
+
+	api.Handle("/product", n.With(
+		negroni.Wrap(createProduct(service)),
+	)).Methods("POST", "OPTIONS")
+
+	api.Handle("/product/{id}", n.With(
+		negroni.Wrap(updateProduct(service)),
+	)).Methods("PUT", "OPTIONS")
+
+	api.Handle("/product/{id}", n.With(
+		negroni.Wrap(deleteProduct(service)),
+	)).Methods("DELETE", "OPTIONS")
+
 }

@@ -1,11 +1,15 @@
 package config
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 type Config struct {
 	SRV_PORT string
 	WEB_UI   bool
 	DBConfig
+	Mode string
 }
 
 type DBConfig struct {
@@ -18,14 +22,25 @@ type DBConfig struct {
 	DB_DSN   string
 }
 
-func NewConfig(SRV_PORT string, db_config DBConfig, WEB_UI bool) *Config {
+func NewConfig(SRV_PORT string, db_config DBConfig) *Config {
 
 	var conf Config = Config{
 		DBConfig: db_config,
+		Mode:     DEVELOPER,
 	}
 
 	if SRV_PORT != "" {
 		conf.SRV_PORT = SRV_PORT
+	}
+
+	SRV_MODE := os.Getenv("SRV_MODE")
+	if SRV_MODE != "" {
+		conf.Mode = SRV_MODE
+	}
+
+	SRV_WEB_UI := os.Getenv("SRV_WEB_UI")
+	if SRV_WEB_UI != "" {
+		conf.WEB_UI = true
 	}
 
 	if db_config.DB_DRIVE != "" {
@@ -40,8 +55,6 @@ func NewConfig(SRV_PORT string, db_config DBConfig, WEB_UI bool) *Config {
 		conf.DB_NAME = "stoq"
 	}
 
-	conf.WEB_UI = WEB_UI
-
 	switch conf.DB_DRIVE {
 	case "sqlite3":
 		conf.DB_DSN = fmt.Sprintf(conf.DB_NAME)
@@ -55,3 +68,8 @@ func NewConfig(SRV_PORT string, db_config DBConfig, WEB_UI bool) *Config {
 
 	return &conf
 }
+
+const (
+	DEVELOPER  = "developer"
+	PRODUCTION = "production"
+)

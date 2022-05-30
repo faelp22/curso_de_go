@@ -7,21 +7,21 @@ import (
 	"time"
 
 	"github.com/faelp22/tcs_curso/stoq/config"
+	"github.com/gorilla/mux"
 )
 
-func NewHTTPServer(conf *config.Config) {
+func NewHTTPServer(r *mux.Router, conf *config.Config) {
 
 	srv := &http.Server{
 		ReadTimeout:  30 * time.Second,
 		WriteTimeout: 30 * time.Second,
 		Addr:         ":" + conf.SRV_PORT,
-		Handler:      http.DefaultServeMux,
+		Handler:      r,
 		ErrorLog:     log.New(os.Stderr, "logger: ", log.Lshortfile),
 	}
 
-	err := srv.ListenAndServe()
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	done := make(chan bool)
+	go srv.ListenAndServe()
+	log.Printf("Server Run on Port: %v, Mode: %v, WEBUI: %v", conf.SRV_PORT, conf.Mode, conf.WEB_UI)
+	<-done
 }

@@ -29,7 +29,7 @@ func NewProdutoService(dabase_pool database.DatabaseInterface) *produto_service 
 func (ps *produto_service) GetAll() *entity.ProdutoList {
 	DB := ps.dbp.GetDB()
 
-	rows, err := DB.Query("select id, name, code, price from tb_produto limit 100;")
+	rows, err := DB.Query("SELECT id, name, code, price FROM tb_produto LIMIT 100;")
 	if err != nil {
 		fmt.Println(err.Error())
 	}

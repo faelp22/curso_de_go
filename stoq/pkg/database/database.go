@@ -59,6 +59,6 @@ func (d *dabase_pool) Close() error {
 	return err
 }
 
-func (dbp *dabase_pool) GetDB() (DB *sql.DB) {
-	return dbp.DB
+func (d *dabase_pool) GetDB() (DB *sql.DB) {
+	return d.DB
 }
