@@ -10,7 +10,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func NewHTTPServer(r *mux.Router, conf *config.Config) {
+func NewHTTPServer(r *mux.Router, conf *config.Config) *http.Server {
 
 	srv := &http.Server{
 		ReadTimeout:  30 * time.Second,
@@ -20,8 +20,5 @@ func NewHTTPServer(r *mux.Router, conf *config.Config) {
 		ErrorLog:     log.New(os.Stderr, "logger: ", log.Lshortfile),
 	}
 
-	done := make(chan bool)
-	go srv.ListenAndServe()
-	log.Printf("Server Run on Port: %v, Mode: %v, WEBUI: %v", conf.SRV_PORT, conf.Mode, conf.WEB_UI)
-	<-done
+	return srv
 }

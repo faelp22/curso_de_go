@@ -1,0 +1,4 @@
+!/webui/dist/**
+!cmd/stoq/main.go
+.git
+main

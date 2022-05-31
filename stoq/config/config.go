@@ -22,20 +22,25 @@ type DBConfig struct {
 	DB_DSN   string
 }
 
-func NewConfig(SRV_PORT string, db_config DBConfig) *Config {
+func NewConfig(db_config DBConfig) *Config {
 
 	var conf Config = Config{
 		DBConfig: db_config,
 		Mode:     DEVELOPER,
 	}
 
+	SRV_PORT := os.Getenv("SRV_PORT")
 	if SRV_PORT != "" {
 		conf.SRV_PORT = SRV_PORT
+	} else {
+		conf.SRV_PORT = "8080"
 	}
 
 	SRV_MODE := os.Getenv("SRV_MODE")
 	if SRV_MODE != "" {
 		conf.Mode = SRV_MODE
+	} else {
+		conf.Mode = PRODUCTION
 	}
 
 	SRV_WEB_UI := os.Getenv("SRV_WEB_UI")

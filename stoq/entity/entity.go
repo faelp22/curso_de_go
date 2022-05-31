@@ -53,3 +53,17 @@ func NewProduto(nome, code string, price float64) *Produto {
 		Price: price,
 	}
 }
+
+type User struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+func NewAdmin() *User {
+	return &User{
+		Username: "admin",
+		Password: "supersenha",
+	}
+}
+
+const USER_TOKEN = "WzD5fqrlaAXLv26bpI0hxvAhDp7T1Bac"

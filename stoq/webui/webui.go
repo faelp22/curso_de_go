@@ -1,4 +1,4 @@
-package web
+package webui
 
 import (
 	"embed"
@@ -11,7 +11,7 @@ import (
 	"github.com/urfave/negroni"
 )
 
-//go:embed public/*
+//go:embed dist/*
 var Assets embed.FS
 
 type fsFunc func(name string) (fs.File, error)
@@ -25,15 +25,11 @@ func AssetHandler(prefix, root string) http.Handler {
 	handler := fsFunc(func(name string) (fs.File, error) {
 		assetPath := path.Join(root, name)
 
-		// If we can't find the asset, return the default index.html
-		// content
 		f, err := Assets.Open(assetPath)
 		if os.IsNotExist(err) {
-			return Assets.Open("public/index.html")
+			return Assets.Open("dist/spa/index.html")
 		}
 
-		// Otherwise assume this is a legitimate request routed
-		// correctly
 		return f, err
 	})
 
@@ -41,7 +37,9 @@ func AssetHandler(prefix, root string) http.Handler {
 }
 
 func RegisterUIHandlers(r *mux.Router, n *negroni.Negroni) {
-	r.PathPrefix("/webui").Handler(n.With(
-		negroni.Wrap(AssetHandler("/webui", "public/")),
+
+	r.PathPrefix("/webui/{_dummy:.*}").Handler(n.With(
+		negroni.Wrap(AssetHandler("/webui", "dist/spa/")),
 	)).Methods("GET", "OPTIONS")
+
 }

@@ -1,0 +1,11 @@
+version: '3.9'
+services:
+  stoq:
+    image: faelp22/stoq:1.0.0
+    # restart: always
+    environment:
+      - WEB_UI=true
+      - Mode="developer"
+
+    ports:
+      - 8080:8080

@@ -12,9 +12,6 @@ import (
 
 func getAllProduct(service service.ProdutoServiceInterface) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-
 		all := service.GetAll()
 		err := json.NewEncoder(w).Encode(all)
 		if err != nil {
@@ -27,8 +24,6 @@ func getAllProduct(service service.ProdutoServiceInterface) http.Handler {
 
 func getProduct(service service.ProdutoServiceInterface) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 		vars := mux.Vars(r)
 
@@ -57,8 +52,6 @@ func getProduct(service service.ProdutoServiceInterface) http.Handler {
 
 func createProduct(service service.ProdutoServiceInterface) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 		produto := entity.Produto{}
 
@@ -89,8 +82,6 @@ func createProduct(service service.ProdutoServiceInterface) http.Handler {
 
 func updateProduct(service service.ProdutoServiceInterface) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 		vars := mux.Vars(r)
 
@@ -130,8 +121,6 @@ func updateProduct(service service.ProdutoServiceInterface) http.Handler {
 
 func deleteProduct(service service.ProdutoServiceInterface) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 		vars := mux.Vars(r)
 

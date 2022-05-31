@@ -11,7 +11,7 @@ import (
 
 func main() {
 
-	config := config.NewConfig("8080", config.DBConfig{
+	config := config.NewConfig(config.DBConfig{
 		DB_DRIVE: "sqlite3",
 		// DB_HOST:  "192.168.0.100",
 		// DB_PORT:  "5432",

@@ -1,0 +1,13 @@
+.DS_Store
+.thumbs.db
+node_modules
+
+# Quasar core related directories
+.quasar
+/dist
+
+# Editor directories and files
+.idea
+.vscode
+main
+*.exe
