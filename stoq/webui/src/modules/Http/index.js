@@ -1,6 +1,6 @@
-import ajaxClient from './ajaxClient';
+import ajaxClient from './ajaxClient'
 
 export default {
-    namespaced: true,
-    ...ajaxClient,
-};
+  namespaced: true,
+  ...ajaxClient
+}

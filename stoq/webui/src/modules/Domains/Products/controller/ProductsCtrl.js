@@ -1,48 +1,39 @@
 import {
   mapState,
   mapActions
-} from 'vuex';
-
+} from 'vuex'
 
 export default {
 
   computed: {
-
     ...mapState('Products', [
-      'list_products',
-    ]),
+      'list_products'
+    ])
   },
 
-  created() {
-    this.setListProductsAction();
+  created () {
+    this.setListProductsAction()
   },
 
   methods: {
 
     ...mapActions('Products', [
+      'iniciarProductAction',
+      'setProductAction',
       'setListProductsAction',
+      'deleteProductAction'
     ]),
 
-    deleteItem(item) {
-      this.list_products = this.list_products.filter((e) => {
-        return e.hash !== item.hash;
-      });
-      this.$forceUpdate();
-    },
+    async deleteProduct (product) {
+      await this.setProductAction({ product })
 
-    addItem() {
-      this.list_products.push({
-        "hash": "fsdfsdf",
-        "path": "http://localhost:5002",
-        "name": "fsdfsdf",
-        "count": 0,
-        "send": false,
-        "found": false,
-        "jwt_check": false,
-        "db_auto": true
-      })
-      console.log(this.list_products)
-      this.$forceUpdate();
-    },
+      if (confirm('Deseja realmente deletar este produto?') === true) {
+        await this.deleteProductAction()
+        await this.setListProductsAction()
+      } else {
+        this.iniciarProductAction()
+      }
+    }
+
   }
 }

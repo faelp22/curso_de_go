@@ -13,7 +13,7 @@
       </q-card-section>
 
       <q-card-section class="q-pt-none full-width">
-        <q-input v-model="password" outlined type="password" label="Senha">
+        <q-input v-model="password" outlined :type="isPwd ? 'password' : 'text'" label="Senha">
         <template v-slot:append>
           <q-icon
             :name="isPwd ? 'visibility_off' : 'visibility'"
@@ -32,6 +32,6 @@
 </template>
 
 <script>
-    import LoginCtrl from "./LoginCtrl";
-    export default LoginCtrl;
+import LoginCtrl from './LoginCtrl'
+export default LoginCtrl
 </script>

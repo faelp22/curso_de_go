@@ -1,95 +1,79 @@
-import config from '../../../../config';
-import Http from '../../../Http';
-
+import config from '../../../../config'
+import Http from '../../../Http'
 
 const setProductAction = async (store, obj) => {
-    try {
-
-        if(obj.hasOwnProperty('usuario')){
-            store.commit('SET_PRODUCT_MUTATION', { dados: obj.usuario });
-            return;
-        }
-
-        let url = config.apiPath + 'api/v1/product/' + obj.id;
-        const { data } = await Http.getData(url);
-
-        if(data.hasOwnProperty('product')){
-            store.commit('SET_PRODUCT_MUTATION', { dados: data['product'] });
-        }
-
-    } catch (e) {
-        console.log('setProductAction', e);
+  try {
+    if (Object.prototype.hasOwnProperty.call(obj, 'product')) {
+      store.commit('SET_PRODUCT_MUTATION', { dados: obj.product })
+      return
     }
-};
+
+    const url = config.apiPath + 'api/v1/product/' + obj.id
+    const { data } = await Http.getData(url)
+
+    if (Object.prototype.hasOwnProperty.call(data, 'id')) {
+      store.commit('SET_PRODUCT_MUTATION', { dados: data })
+    }
+  } catch (e) {
+    console.log('setProductAction', e)
+  }
+}
 
 const setListProductsAction = async (store, obj) => {
-    try {
+  try {
+    const url = config.apiPath + 'api/v1/products'
+    const { data } = await Http.getData(url)
 
-        let url = config.apiPath + 'api/v1/products';
-        const { data } = await Http.getData(url);
-
-        if(data.hasOwnProperty('list')){
-            store.commit('SET_LIST_PRODUCTS_MUTATION', { lista: data['list'] });
-        }
-    } catch (e) {
-        console.log('setListProductsAction', e);
+    if (Object.prototype.hasOwnProperty.call(data, 'list')) {
+      store.commit('SET_LIST_PRODUCTS_MUTATION', { lista: data.list })
     }
-};
+  } catch (e) {
+    console.log('setListProductsAction', e)
+  }
+}
 
 const setProductsInListAction = async (store, obj) => {
-    try {
-        if(obj.hasOwnProperty('product')){
-            store.commit('SET_PRODUCTS_IN_LIST_MUTATION', { dados: obj.product });
-            return;
-        }
-
-        let url = config.apiPath + 'api/v1/product/' + obj.id;
-        const { data } = await Http.getData(url);
-
-        if(data.hasOwnProperty('product')){
-            store.commit('SET_PRODUCTS_IN_LIST_MUTATION', { dados: data['usuario'] });
-        }
-    } catch (e) {
-        console.log('setProductsInListAction', e);
+  try {
+    if (Object.prototype.hasOwnProperty.call(obj, 'name') && obj.name) {
+      if (Object.prototype.hasOwnProperty.call(obj, 'id') && obj.id) {
+        const url = config.apiPath + 'api/v1/product/' + obj.id
+        await Http.putData(url, obj)
+      } else {
+        const url = config.apiPath + 'api/v1/product'
+        await Http.postData(url, obj)
+      }
     }
-};
-
+  } catch (e) {
+    console.log('setProductsInListAction', e)
+  }
+}
 
 const deleteProductAction = async (store, obj) => {
-    try {
-
-      let url = config.apiPath + 'api/v1/product/' + store.state.product.id;
-        await Http.deleteData(url).then(function () {
-            store.commit('SET_PRODUCT_MUTATION', { dados: {} });
-        }).catch(function (error) {
-            console.log(error);
-        });
-    } catch (e) {
-        console.log('deleteProductAction', e);
-    }
-};
+  try {
+    const url = config.apiPath + 'api/v1/product/' + store.state.product.id
+    await Http.deleteData(url).then(() => {
+      store.commit('SET_PRODUCT_MUTATION', { dados: {} })
+    }).catch((error) => {
+      console.log(error)
+    })
+  } catch (e) {
+    console.log('deleteProductAction', e)
+  }
+}
 
 const iniciarProductAction = async (store, obj) => {
-  let hash = randomHash(64)
-  let web_service = {
-    hash: hash,
-    path: "http://localhost:8000/",
-    name: "",
-    image: "",
-    created: "2022-03-05 19:57:30",
-    count: 0,
-    send: false,
-    found: false,
-    jwt_check: false,
-    db_auto: false,
-  };
-  store.commit('SET_PRODUCT_MUTATION', {dados: web_service});
-};
+  const product = {
+    name: '',
+    code: '',
+    price: 0
+  }
+  store.commit('SET_PRODUCT_MUTATION', { dados: product })
+}
 
 export default {
-    setProductAction,
-    setListProductsAction,
-    setProductsInListAction,
-    deleteProductAction,
-    iniciarProductAction,
-};
+  setProductAction,
+  setListProductsAction,
+  setProductsInListAction,
+  deleteProductAction,
+  iniciarProductAction
+}

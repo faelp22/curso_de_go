@@ -5,6 +5,8 @@
 FROM golang:1.17.8-alpine3.15 AS builder
 MAINTAINER Isael Sousa <faelp22@gmail.com>
 
+RUN apk add build-base
+
 WORKDIR /myapp/
 
 COPY . .
@@ -16,6 +18,7 @@ FROM alpine:3.15
 WORKDIR /home/appuser/app/
 
 COPY --from=builder /myapp/app ./
+COPY --from=builder /myapp/db.sqlite3 ./
 
 RUN echo "**** Install Dependencies ****" \
   && adduser --uid 1000 --gecos 'App User' --disabled-password appuser \

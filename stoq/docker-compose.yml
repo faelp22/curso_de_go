@@ -4,8 +4,8 @@ services:
     image: faelp22/stoq:1.0.0
     # restart: always
     environment:
-      - WEB_UI=true
-      - Mode="developer"
+      - SRV_WEB_UI=true
+      - SRV_MODE="developer"
 
     ports:
-      - 8080:8080
+      - 9090:8080

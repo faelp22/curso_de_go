@@ -1,10 +1,9 @@
-import { store } from 'quasar/wrappers'
-import { createStore } from 'vuex'
-
-import getters from './getters'
-import mutations from './mutations'
-import actions from './actions'
-import state from './state'
+import {
+  store
+} from 'quasar/wrappers'
+import {
+  createStore
+} from 'vuex'
 
 import Modules from '../modules'
 
@@ -22,8 +21,6 @@ export default store(function (/* { ssrContext } */) {
     modules: {
       ...Modules.modules
     },
-
-    getters, mutations, actions, state,
 
     // enable strict mode (adds overhead!)
     // for dev mode and --debug builds only

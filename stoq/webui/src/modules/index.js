@@ -1,15 +1,14 @@
-import Products from "./Domains/Products";
-
+import Products from './Domains/Products'
 
 const modules = {
-    Products: Products.store,
+  Products: Products.store
 }
 
 const routes = [
-  ...Products.routes,
+  ...Products.routes
 ]
 
 export default {
-    modules,
-    routes,
-};
+  modules,
+  routes
+}
