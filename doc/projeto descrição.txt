@@ -24,7 +24,7 @@ Todas as interações devem ser feitas via API Rest
 
 2 - O sistema deve aprensetar uma tela com uma tabela de produtos
 
-	A tabela deve ter os seguintes campos
+	A tabela/cards deve ter os seguintes campos
 
 	Id, Nome, Código, Valor
 

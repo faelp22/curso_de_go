@@ -1,3 +1,5 @@
+github.com/faelp22/browser v0.0.0-20210618215125-660206cb6b7f h1:37qatQhgkEJsQTeLv1daw4O9qXwYXfV7bNP2yNqT8kc=
+github.com/faelp22/browser v0.0.0-20210618215125-660206cb6b7f/go.mod h1:2ral5xHm+K0SyO5WUQAOEO/UYJClGRiIHw3ST7X+dIc=
 github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
 github.com/gorilla/mux v1.8.0/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
 github.com/mattn/go-sqlite3 v1.14.13 h1:1tj15ngiFfcZzii7yd82foL+ks+ouQcj8j/TPq3fk1I=

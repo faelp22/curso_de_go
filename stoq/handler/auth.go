@@ -20,9 +20,7 @@ func authLogin() http.Handler {
 		}
 
 		admin := entity.NewAdmin()
-		token := struct {
-			Token string `json:"token"`
-		}{
+		token := entity.Token{
 			Token: entity.USER_TOKEN,
 		}
 

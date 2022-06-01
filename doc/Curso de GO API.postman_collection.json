@@ -116,7 +116,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\": 14,\r\n    \"name\": \"TV 65\",\r\n    \"code\": \"SAMSUNG\",\r\n    \"price\": 7500\r\n}",
+					"raw": "{\r\n    \"id\": 4,\r\n    \"name\": \"Notebook 15\",\r\n    \"code\": \"Lenovo\",\r\n    \"price\": 4500\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -138,7 +138,7 @@
 					"variable": [
 						{
 							"key": "ID",
-							"value": "14"
+							"value": "4"
 						}
 					]
 				}

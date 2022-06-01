@@ -1,8 +1,8 @@
 export default {
 
   // Default API Path
-  // apiPath: '/' // Prod
+  apiPath: '/' // Prod
 
-  apiPath: 'http://localhost:8081/' // Dev
+  // apiPath: 'http://localhost:8081/' // Dev
 
 }

@@ -66,4 +66,8 @@ func NewAdmin() *User {
 	}
 }
 
+type Token struct {
+	Token string `json:"token"`
+}
+
 const USER_TOKEN = "WzD5fqrlaAXLv26bpI0hxvAhDp7T1Bac"

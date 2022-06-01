@@ -26,6 +26,8 @@ func main() {
 		DB_NAME: "db.sqlite3",
 	})
 
+	conf.WEB_UI = true
+
 	dbpool := database.NewDB(conf)
 	service := service.NewProdutoService(dbpool)
 

@@ -23,13 +23,14 @@ func isAuth() negroni.Handler {
 		}
 
 		tmp_token := r.Header.Get("Authorization")
-		if tmp_token[7:] == entity.USER_TOKEN {
-			next(w, r)
-			return
-		} else {
-			w.WriteHeader(http.StatusUnauthorized)
-			w.Write([]byte(`{"MSG": "Error token invalid", "codigo": 401}`))
-			return
+		if len(tmp_token) > 0 {
+			if tmp_token[7:] == entity.USER_TOKEN {
+				next(w, r)
+				return
+			}
 		}
+
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(`{"MSG": "Error token invalid", "codigo": 401}`))
 	})
 }
