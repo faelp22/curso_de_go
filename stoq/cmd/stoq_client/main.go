@@ -1,38 +1,31 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
 
-	"github.com/faelp22/browser/bro"
+	"github.com/faelp22/browser"
+	"github.com/faelp22/browser/prepare"
 	"github.com/faelp22/tcs_curso/stoq/entity"
 )
 
-type BrowserCli interface {
-	Get(url string) (*http.Response, error)
-	Post(url string, payload io.Reader) (*http.Response, error)
-	Put(url string, payload io.Reader) (*http.Response, error)
-	Delete(url string) (*http.Response, error)
-}
-
 func main() {
 
-	base_url := "http://localhost:8080"
-	ssl_verify := false
-	header := http.Header{
-		"Content-Type": []string{"application/json; charset=utf-8"},
-	}
-
-	bro := bro.NewBrowser(base_url, ssl_verify, header, 10)
+	bro := browser.NewBrowser(browser.BrowserConfig{
+		BaseURL:   "http://localhost:8080",
+		SSLVerify: false,
+		Header: http.Header{
+			"Content-Type": []string{"application/json; charset=utf-8"},
+		},
+		Timeout: 3, // 3 segundos
+	})
 
 	token := Login(bro)
 
-	bro.AddHeader("Authorization", "Bearer "+token.Token)
+	bro.SetHeader("Authorization", "Bearer "+token.Token)
 
 	resp, err := bro.Get("/api/v1/products")
 	if err != nil {
@@ -57,7 +50,7 @@ func main() {
 	fmt.Println(string(body))
 }
 
-func Login(bro BrowserCli) *entity.Token {
+func Login(bro browser.BrowserCli) *entity.Token {
 	url := "/api/v1/user/login"
 
 	user := entity.NewAdmin()
@@ -66,7 +59,7 @@ func Login(bro BrowserCli) *entity.Token {
 
 	// fmt.Println(string(dados))
 
-	payload := bytes.NewBuffer(dados)
+	payload := prepare.PrepareJSON(bro, dados)
 
 	resp, err := bro.Post(url, payload)
 	if err != nil {
@@ -81,7 +74,7 @@ func Login(bro BrowserCli) *entity.Token {
 		fmt.Println(err.Error())
 	}
 
-	fmt.Println(string(body))
+	// fmt.Println(string(body))
 
 	token := entity.Token{}
 
@@ -91,7 +84,7 @@ func Login(bro BrowserCli) *entity.Token {
 		fmt.Println(err.Error())
 	}
 
-	// fmt.Println(token)
+	// fmt.Println(token.Token)
 
 	return &token
 }
