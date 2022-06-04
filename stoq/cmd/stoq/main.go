@@ -1,8 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"os"
 	"strings"
 
 	"github.com/faelp22/tcs_curso/stoq/config"
@@ -17,16 +20,14 @@ import (
 
 func main() {
 
-	conf := config.NewConfig(config.DBConfig{
-		DB_DRIVE: "sqlite3",
-		// DB_HOST:  "192.168.0.100",
-		// DB_PORT:  "5432",
-		// DB_USER:  "root",
-		// DB_PASS:  "123456",
-		DB_NAME: "db.sqlite3",
-	})
+	default_conf := &config.Config{}
 
-	conf.WEB_UI = true
+	if file_config := os.Getenv("STOQ_CONFIG"); file_config != "" {
+		file, _ := ioutil.ReadFile(file_config)
+		_ = json.Unmarshal(file, &default_conf)
+	}
+
+	conf := config.NewConfig(default_conf)
 
 	dbpool := database.NewDB(conf)
 	service := service.NewProdutoService(dbpool)

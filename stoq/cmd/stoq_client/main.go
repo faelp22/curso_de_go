@@ -10,6 +10,7 @@ import (
 	"github.com/faelp22/browser"
 	"github.com/faelp22/browser/prepare"
 	"github.com/faelp22/tcs_curso/stoq/entity"
+	"github.com/faelp22/tcs_curso/stoq/pkg/crypto"
 )
 
 func main() {
@@ -45,6 +46,11 @@ func main() {
 		fmt.Printf("StatusCode: %v\n", resp.StatusCode)
 		fmt.Println(string(body))
 		os.Exit(1)
+	}
+
+	ok := crypto.WriteCryptoFile("./dados.txt", body)
+	if ok {
+		fmt.Println("Arquivo criado")
 	}
 
 	fmt.Println(string(body))

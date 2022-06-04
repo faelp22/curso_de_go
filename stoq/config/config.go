@@ -3,78 +3,114 @@ package config
 import (
 	"fmt"
 	"os"
+	"strconv"
+)
+
+const (
+	DEVELOPER    = "developer"
+	HOMOLOGATION = "homologation"
+	PRODUCTION   = "production"
 )
 
 type Config struct {
-	SRV_PORT string
-	WEB_UI   bool
-	DBConfig
-	Mode string
+	SRV_PORT string `json:"srv_port"`
+	WEB_UI   bool   `json:"web_ui"`
+	DBConfig `json:"dbconfig"`
+	Mode     string `json:"mode"`
 }
 
 type DBConfig struct {
-	DB_DRIVE string
-	DB_HOST  string
-	DB_PORT  string
-	DB_USER  string
-	DB_PASS  string
-	DB_NAME  string
-	DB_DSN   string
+	DB_DRIVE string `json:"db_drive"`
+	DB_HOST  string `json:"db_host"`
+	DB_PORT  string `json:"db_port"`
+	DB_USER  string `json:"db_user"`
+	DB_PASS  string `json:"db_pass"`
+	DB_NAME  string `json:"db_name"`
+	DB_DSN   string `json:"-"`
 }
 
-func NewConfig(db_config DBConfig) *Config {
+func NewConfig(confi *Config) *Config {
+	var conf *Config
 
-	var conf Config = Config{
-		DBConfig: db_config,
-		Mode:     DEVELOPER,
+	if confi == nil || confi.SRV_PORT == "" {
+		conf = defaultConf()
+	} else {
+		conf = confi
 	}
 
 	SRV_PORT := os.Getenv("SRV_PORT")
 	if SRV_PORT != "" {
 		conf.SRV_PORT = SRV_PORT
-	} else {
-		conf.SRV_PORT = "8080"
 	}
 
 	SRV_MODE := os.Getenv("SRV_MODE")
 	if SRV_MODE != "" {
 		conf.Mode = SRV_MODE
-	} else {
-		conf.Mode = PRODUCTION
 	}
 
 	SRV_WEB_UI := os.Getenv("SRV_WEB_UI")
 	if SRV_WEB_UI != "" {
-		conf.WEB_UI = true
+		conf.WEB_UI, _ = strconv.ParseBool(SRV_WEB_UI)
 	}
 
-	if db_config.DB_DRIVE != "" {
-		conf.DB_DRIVE = db_config.DB_DRIVE
-	} else {
-		conf.DB_DRIVE = "sqlite3"
+	SRV_DB_DRIVE := os.Getenv("SRV_DB_DRIVE")
+	if SRV_DB_DRIVE != "" {
+		conf.DBConfig.DB_DRIVE = SRV_DB_DRIVE
 	}
 
-	if db_config.DB_NAME != "" {
-		conf.DB_NAME = db_config.DB_NAME
-	} else {
-		conf.DB_NAME = "stoq"
+	SRV_DB_HOST := os.Getenv("SRV_DB_HOST")
+	if SRV_DB_HOST != "" {
+		conf.DBConfig.DB_HOST = SRV_DB_HOST
 	}
 
-	switch conf.DB_DRIVE {
+	SRV_DB_PORT := os.Getenv("SRV_DB_PORT")
+	if SRV_DB_PORT != "" {
+		conf.DBConfig.DB_PORT = SRV_DB_PORT
+	}
+
+	SRV_DB_USER := os.Getenv("SRV_DB_USER")
+	if SRV_DB_USER != "" {
+		conf.DBConfig.DB_USER = SRV_DB_USER
+	}
+
+	SRV_DB_PASS := os.Getenv("SRV_DB_PASS")
+	if SRV_DB_PASS != "" {
+		conf.DBConfig.DB_PASS = SRV_DB_PASS
+	}
+
+	SRV_DB_NAME := os.Getenv("SRV_DB_NAME")
+	if SRV_DB_NAME != "" {
+		conf.DBConfig.DB_NAME = SRV_DB_NAME
+	}
+
+	switch conf.DBConfig.DB_DRIVE {
 	case "sqlite3":
-		conf.DB_DSN = fmt.Sprintf(conf.DB_NAME)
+		conf.DBConfig.DB_DSN = fmt.Sprintf(conf.DB_NAME)
 
 	case "postgresql":
-		conf.DB_DSN = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		conf.DBConfig.DB_DSN = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 			conf.DB_HOST, conf.DB_PORT, conf.DB_USER, conf.DB_PASS, conf.DB_NAME)
 	default:
 		panic("Drive não implementado")
 	}
 
-	return &conf
+	return conf
 }
 
-const (
-	DEVELOPER  = "developer"
-	PRODUCTION = "production"
-)
+func defaultConf() *Config {
+	default_conf := Config{
+		SRV_PORT: "8080",
+		WEB_UI:   true,
+		DBConfig: DBConfig{
+			DB_DRIVE: "sqlite3",
+			// DB_HOST:  "192.168.0.100",
+			// DB_PORT:  "5432",
+			// DB_USER:  "root",
+			// DB_PASS:  "123456",
+			DB_NAME: "db.sqlite3",
+		},
+		Mode: PRODUCTION,
+	}
+
+	return &default_conf
+}

@@ -1,4 +1,5 @@
+.git
 !/webui/dist/**
 !cmd/stoq/main.go
-.git
+stoq_config.json
 main

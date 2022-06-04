@@ -2,16 +2,22 @@
 #
 # VERSION               1.0.0
 
-FROM golang:1.17.8-alpine3.15 AS builder
+FROM golang:1.18.2-alpine3.15 AS base_builder
 MAINTAINER Isael Sousa <faelp22@gmail.com>
 
-RUN apk add build-base
+WORKDIR /myapp/
+
+COPY ["go.mod", "go.sum", "./"]
+
+RUN apk add build-base && go mod tidy
+
+FROM base_builder AS builder
 
 WORKDIR /myapp/
 
 COPY . .
 
-RUN go build -o app cmd/stoq/main.go
+RUN go build -ldflags "-s -w" -o app cmd/stoq/main.go
 
 FROM alpine:3.15
 
