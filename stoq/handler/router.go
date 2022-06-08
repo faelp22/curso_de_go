@@ -13,7 +13,7 @@ func RegisterAPIHandlers(r *mux.Router, n *negroni.Negroni, service service.Prod
 	n.Use(applicationJSON())
 	n.Use(isAuth())
 
-	api.Handle("/user/login", n.With(
+	api.Handle("/usuario/token", n.With(
 		negroni.Wrap(authLogin()),
 	)).Methods("POST", "OPTIONS")
 

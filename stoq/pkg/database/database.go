@@ -2,11 +2,9 @@ package database
 
 import (
 	"database/sql"
-	"log"
+	"fmt"
 
 	"github.com/faelp22/tcs_curso/stoq/config"
-
-	_ "github.com/mattn/go-sqlite3"
 )
 
 type DatabaseInterface interface {
@@ -22,26 +20,16 @@ var dbpool = &dabase_pool{}
 
 func NewDB(conf *config.Config) *dabase_pool {
 
-	if dbpool != nil && dbpool.DB != nil {
-
-		return dbpool
-
-	} else {
-
-		db, err := sql.Open(conf.DB_DRIVE, conf.DB_DSN)
-		if err != nil {
-			log.Fatal(err)
-		}
-		// defer db.Close()
-
-		err = db.Ping()
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		dbpool = &dabase_pool{
-			DB: db,
-		}
+	switch conf.DBConfig.DB_DRIVE {
+	case "sqlite3":
+		conf.DBConfig.DB_DSN = fmt.Sprintf(conf.DB_NAME)
+		dbpool = SQLiteConn(conf)
+	case "postgres":
+		conf.DBConfig.DB_DSN = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+			conf.DB_HOST, conf.DB_PORT, conf.DB_USER, conf.DB_PASS, conf.DB_NAME)
+		dbpool = PGConn(conf)
+	default:
+		panic("Drive não implementado")
 	}
 
 	return dbpool

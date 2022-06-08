@@ -1,11 +1,17 @@
 version: '3.9'
 services:
   stoq:
-    image: faelp22/stoq:1.0.0
+    image: faelp22/stoq:1.0.1
     # restart: always
     environment:
-      - SRV_WEB_UI=true
+      - SRV_WEB_UI=false
       - SRV_MODE="developer"
 
     ports:
-      - 9090:8080
+      - 8080
+
+    labels:
+      - "msgateway.name=autenticacao"
+      - "msgateway.path=/"
+      - "msgateway.jwt_check=false"
+      - "msgateway.db_auto=false"

@@ -1,6 +1,7 @@
 {
     "srv_port": "8080",
     "web_ui": false,
+    "mode": "production",
     "dbconfig": {
         "db_drive": "sqlite3",
         "db_host": "",
@@ -8,6 +9,5 @@
         "db_user": "",
         "db_pass": "",
         "db_name": "db.sqlite3"
-    },
-    "mode": "production"
+    }
 }

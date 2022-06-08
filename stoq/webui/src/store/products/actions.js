@@ -1,5 +1,5 @@
-import config from '../../../../config'
-import Http from '../../../Http'
+import config from '../../config'
+import Http from '../../services/Http'
 
 const setProductAction = async (store, obj) => {
   try {

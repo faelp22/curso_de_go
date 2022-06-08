@@ -5,7 +5,7 @@ import {
   createStore
 } from 'vuex'
 
-import Modules from '../modules'
+import products from './products'
 
 /*
  * If not building with SSR mode, you can
@@ -19,7 +19,7 @@ import Modules from '../modules'
 export default store(function (/* { ssrContext } */) {
   const Store = createStore({
     modules: {
-      ...Modules.modules
+      Products: { ...products }
     },
 
     // enable strict mode (adds overhead!)

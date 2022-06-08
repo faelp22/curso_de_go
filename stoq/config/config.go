@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"os"
 	"strconv"
 )
@@ -13,20 +12,20 @@ const (
 )
 
 type Config struct {
-	SRV_PORT string `json:"srv_port"`
-	WEB_UI   bool   `json:"web_ui"`
-	DBConfig `json:"dbconfig"`
-	Mode     string `json:"mode"`
+	SRV_PORT string `toml:"srv_port" yaml:"srv_port" json:"srv_port"`
+	WEB_UI   bool   `toml:"web_ui" yaml:"web_ui" json:"web_ui"`
+	Mode     string `toml:"mode" yaml:"mode" json:"mode"`
+	DBConfig `toml:"dbconfig" yaml:"dbconfig" json:"dbconfig"`
 }
 
 type DBConfig struct {
-	DB_DRIVE string `json:"db_drive"`
-	DB_HOST  string `json:"db_host"`
-	DB_PORT  string `json:"db_port"`
-	DB_USER  string `json:"db_user"`
-	DB_PASS  string `json:"db_pass"`
-	DB_NAME  string `json:"db_name"`
-	DB_DSN   string `json:"-"`
+	DB_DRIVE string `toml:"db_drive" yaml:"db_drive" json:"db_drive"`
+	DB_HOST  string `toml:"db_host" yaml:"db_host" json:"db_host"`
+	DB_PORT  string `toml:"db_port" yaml:"db_port" json:"db_port"`
+	DB_USER  string `toml:"db_user" yaml:"db_user" json:"db_user"`
+	DB_PASS  string `toml:"db_pass" yaml:"db_pass" json:"db_pass"`
+	DB_NAME  string `toml:"db_name" yaml:"db_name" json:"db_name"`
+	DB_DSN   string `toml:"-" yaml:"-" json:"-"`
 }
 
 func NewConfig(confi *Config) *Config {
@@ -83,17 +82,6 @@ func NewConfig(confi *Config) *Config {
 		conf.DBConfig.DB_NAME = SRV_DB_NAME
 	}
 
-	switch conf.DBConfig.DB_DRIVE {
-	case "sqlite3":
-		conf.DBConfig.DB_DSN = fmt.Sprintf(conf.DB_NAME)
-
-	case "postgresql":
-		conf.DBConfig.DB_DSN = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-			conf.DB_HOST, conf.DB_PORT, conf.DB_USER, conf.DB_PASS, conf.DB_NAME)
-	default:
-		panic("Drive não implementado")
-	}
-
 	return conf
 }
 
@@ -103,10 +91,12 @@ func defaultConf() *Config {
 		WEB_UI:   true,
 		DBConfig: DBConfig{
 			DB_DRIVE: "sqlite3",
-			// DB_HOST:  "192.168.0.100",
-			// DB_PORT:  "5432",
-			// DB_USER:  "root",
-			// DB_PASS:  "123456",
+			// DB_DRIVE: "postgres",
+			// DB_HOST: "192.168.18.2",
+			// DB_PORT: "5432",
+			// DB_USER: "postgres",
+			// DB_PASS: "123456",
+			// DB_NAME: "stoq",
 			DB_NAME: "db.sqlite3",
 		},
 		Mode: PRODUCTION,

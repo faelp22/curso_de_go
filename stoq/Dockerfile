@@ -2,16 +2,16 @@
 #
 # VERSION               1.0.0
 
-FROM golang:1.18.2-alpine3.15 AS base_builder
+FROM golang:1.18.2-alpine3.15 AS stoq_base_builder
 MAINTAINER Isael Sousa <faelp22@gmail.com>
 
 WORKDIR /myapp/
 
 COPY ["go.mod", "go.sum", "./"]
 
-RUN apk add build-base && go mod tidy
+RUN apk add build-base && go mod download
 
-FROM base_builder AS builder
+FROM stoq_base_builder AS builder
 
 WORKDIR /myapp/
 
@@ -23,8 +23,7 @@ FROM alpine:3.15
 
 WORKDIR /home/appuser/app/
 
-COPY --from=builder /myapp/app ./
-COPY --from=builder /myapp/db.sqlite3 ./
+COPY --from=builder ["/myapp/app", "/myapp/db.sqlite3", "./"]
 
 RUN echo "**** Install Dependencies ****" \
   && adduser --uid 1000 --gecos 'App User' --disabled-password appuser \

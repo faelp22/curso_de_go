@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -16,6 +15,7 @@ import (
 	"github.com/faelp22/tcs_curso/stoq/webui"
 	"github.com/gorilla/mux"
 	"github.com/urfave/negroni"
+	"gopkg.in/yaml.v3"
 )
 
 func main() {
@@ -24,10 +24,15 @@ func main() {
 
 	if file_config := os.Getenv("STOQ_CONFIG"); file_config != "" {
 		file, _ := ioutil.ReadFile(file_config)
-		_ = json.Unmarshal(file, &default_conf)
+
+		_ = yaml.Unmarshal(file, &default_conf)
+		// _ = json.Unmarshal(file, &default_conf)
 	}
 
 	conf := config.NewConfig(default_conf)
+
+	// dados, _ := toml.Marshal(conf)
+	// fmt.Println(string(dados))
 
 	dbpool := database.NewDB(conf)
 	service := service.NewProdutoService(dbpool)
@@ -58,7 +63,7 @@ func main() {
 
 	done := make(chan bool)
 	go srv.ListenAndServe()
-	log.Printf("Server Run on Port: %v, Mode: %v, WEBUI: %v", conf.SRV_PORT, conf.Mode, conf.WEB_UI)
+	log.Printf("Server Run on Port: %v, Mode: %v, DB-Driver: %v, WEBUI: %v", conf.SRV_PORT, conf.Mode, conf.DBConfig.DB_DRIVE, conf.WEB_UI)
 	<-done
 
 }

@@ -1,4 +1,5 @@
-import Modules from '../modules'
+import productTable from '../components/products/TableComponent.vue'
+import productForm from '../components/products/FormComponent.vue'
 
 const routes = [{
   path: '/',
@@ -6,7 +7,7 @@ const routes = [{
   children: [{
     path: '',
     name: 'Login',
-    component: () => import('pages/Login.vue')
+    component: () => import('src/pages/LoginPage.vue')
   }]
 },
 
@@ -18,7 +19,21 @@ const routes = [{
     name: 'Index',
     component: () => import('pages/IndexPage.vue')
   },
-  ...Modules.routes
+  {
+    name: 'ListProducts',
+    path: '/products',
+    component: productTable
+  },
+  {
+    name: 'CreateProduct',
+    path: '/create-product',
+    component: productForm
+  },
+  {
+    name: 'UpdateProduct',
+    path: '/update-product/:id',
+    component: productForm
+  }
   ]
 },
 
