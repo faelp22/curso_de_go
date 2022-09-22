@@ -53,7 +53,7 @@ export default {
     async login () {
       const headers = {}
       const userCredentials = { username: this.username, password: this.password }
-      const url = config.apiPath + 'api/v1/usuario/token'
+      const url = config.apiPath + 'api/v1/user/login'
       Http.postData(url, userCredentials, headers).then((response) => {
         localStorage.setItem('autenticated', JSON.stringify(response.data))
         this.$router.push({ name: 'ListProducts' })

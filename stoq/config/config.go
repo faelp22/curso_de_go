@@ -12,20 +12,20 @@ const (
 )
 
 type Config struct {
-	SRV_PORT string `toml:"srv_port" yaml:"srv_port" json:"srv_port"`
-	WEB_UI   bool   `toml:"web_ui" yaml:"web_ui" json:"web_ui"`
-	Mode     string `toml:"mode" yaml:"mode" json:"mode"`
-	DBConfig `toml:"dbconfig" yaml:"dbconfig" json:"dbconfig"`
+	SRV_PORT string `json:"srv_port"`
+	WEB_UI   bool   `json:"web_ui"`
+	Mode     string `json:"mode"`
+	DBConfig `json:"dbconfig"`
 }
 
 type DBConfig struct {
-	DB_DRIVE string `toml:"db_drive" yaml:"db_drive" json:"db_drive"`
-	DB_HOST  string `toml:"db_host" yaml:"db_host" json:"db_host"`
-	DB_PORT  string `toml:"db_port" yaml:"db_port" json:"db_port"`
-	DB_USER  string `toml:"db_user" yaml:"db_user" json:"db_user"`
-	DB_PASS  string `toml:"db_pass" yaml:"db_pass" json:"db_pass"`
-	DB_NAME  string `toml:"db_name" yaml:"db_name" json:"db_name"`
-	DB_DSN   string `toml:"-" yaml:"-" json:"-"`
+	DB_DRIVE string `json:"db_drive"`
+	DB_HOST  string `json:"db_host"`
+	DB_PORT  string `json:"db_port"`
+	DB_USER  string `json:"db_user"`
+	DB_PASS  string `json:"db_pass"`
+	DB_NAME  string `json:"db_name"`
+	DB_DSN   string `json:"-"`
 }
 
 func NewConfig(confi *Config) *Config {

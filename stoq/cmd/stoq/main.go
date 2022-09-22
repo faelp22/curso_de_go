@@ -1,21 +1,21 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"strings"
 
 	"github.com/faelp22/tcs_curso/stoq/config"
 	"github.com/faelp22/tcs_curso/stoq/handler"
 	"github.com/faelp22/tcs_curso/stoq/pkg/database"
-	"github.com/faelp22/tcs_curso/stoq/pkg/http"
+	lhttp "github.com/faelp22/tcs_curso/stoq/pkg/http"
 	"github.com/faelp22/tcs_curso/stoq/pkg/service"
 	"github.com/faelp22/tcs_curso/stoq/webui"
 	"github.com/gorilla/mux"
 	"github.com/urfave/negroni"
-	"gopkg.in/yaml.v3"
 )
 
 func main() {
@@ -23,16 +23,11 @@ func main() {
 	default_conf := &config.Config{}
 
 	if file_config := os.Getenv("STOQ_CONFIG"); file_config != "" {
-		file, _ := ioutil.ReadFile(file_config)
-
-		_ = yaml.Unmarshal(file, &default_conf)
-		// _ = json.Unmarshal(file, &default_conf)
+		file, _ := os.ReadFile(file_config)
+		_ = json.Unmarshal(file, &default_conf)
 	}
 
 	conf := config.NewConfig(default_conf)
-
-	// dados, _ := toml.Marshal(conf)
-	// fmt.Println(string(dados))
 
 	dbpool := database.NewDB(conf)
 	service := service.NewProdutoService(dbpool)
@@ -41,6 +36,8 @@ func main() {
 	n := negroni.New(
 		negroni.NewLogger(),
 	)
+
+	r.HandleFunc("/", redirect)
 
 	if conf.WEB_UI {
 		webui.RegisterUIHandlers(r, n)
@@ -59,11 +56,15 @@ func main() {
 		})
 	}
 
-	srv := http.NewHTTPServer(r, conf)
+	srv := lhttp.NewHTTPServer(r, conf)
 
 	done := make(chan bool)
 	go srv.ListenAndServe()
 	log.Printf("Server Run on Port: %v, Mode: %v, DB-Driver: %v, WEBUI: %v", conf.SRV_PORT, conf.Mode, conf.DBConfig.DB_DRIVE, conf.WEB_UI)
 	<-done
 
+}
+
+func redirect(w http.ResponseWriter, r *http.Request) {
+	http.Redirect(w, r, "/webui/", http.StatusMovedPermanently)
 }
