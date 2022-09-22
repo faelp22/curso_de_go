@@ -1,40 +1,50 @@
 <template>
-  <div class="row q-pa-md items-start q-gutter-md justify-center full-height full-width text-center">
+  <div class="q-pa-sm row q-gutter-sm justify-center">
 
-    <q-card class="my-card center" >
-      <q-form class="q-gutter-md">
-      <div class="row no-wrap items-center q-mt-md q-pa-sm bg-grey-3 rounded-borders">
-        <div v-if="local_product.id" class="text-h4">Editar Produto</div>
-        <div v-else class="text-h4">Cadastrar Produto</div>
-        <q-space />
-      </div>
-      <q-input
-        filled
-        v-model="local_product.name"
-        label="Nome do produto"
-      />
+    <div class="col-md-6">
+      <q-card flat bordered>
 
-      <q-input
-        filled
-        v-model="local_product.code"
-        label="Código"
-      />
+        <q-card-section>
+          <div v-if="local_product.id" class="text-h4">Editar Produto</div>
+          <div v-else class="text-h4">Cadastrar Produto</div>
+        </q-card-section>
 
-      <q-input
-        filled
-        type="number"
-        v-model="local_product.price"
-        label="Preço"
-      />
-      <q-separator />
-      <q-card-actions>
-        <q-btn flat icon="reply" color="info" :to="{name: 'ListProducts'}" > Voltar</q-btn>
-        <q-btn v-if="!local_product.id" flat icon="cleaning_services" color="warning" @click="resetProduct()" > Limpar</q-btn>
-        <q-btn v-if="local_product.id" flat icon="delete_forever" color="negative" @click="deleteProduct(item)" > Remover</q-btn>
-        <q-btn flat icon="send" color="positive" @click="saveProduct()" > Salvar</q-btn>
-      </q-card-actions>
-    </q-form>
-    </q-card>
+        <q-separator />
+
+        <q-card-section class="q-gutter-sm">
+
+          <q-input
+            filled
+            v-model="local_product.name"
+            label="Nome do produto"
+          />
+
+          <q-input
+            filled
+            v-model="local_product.code"
+            label="Código"
+          />
+
+          <q-input
+            filled
+            type="number"
+            v-model="local_product.price"
+            label="Preço"
+          />
+
+        </q-card-section>
+
+        <q-separator />
+
+        <q-card-actions align="right">
+          <q-btn flat icon="reply" color="info" :to="{name: 'ListProducts'}" label="Voltar" />
+          <q-btn v-if="!local_product.id" flat icon="cleaning_services" color="warning" @click="resetProduct()" label="Limpar" />
+          <q-btn v-if="local_product.id" flat icon="delete_forever" color="negative" @click="deleteProduct(item)" label="Remover" />
+          <q-btn flat icon="send" color="positive" @click="saveProduct()" label="Salvar" />
+        </q-card-actions>
+
+      </q-card>
+    </div>
 
   </div>
 </template>
@@ -108,9 +118,3 @@ export default {
   }
 }
 </script>
-
-<style lang="sass" scoped>
-.my-card
-  width: 100%
-  max-width: 750px
-</style>

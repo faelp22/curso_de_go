@@ -1,5 +1,9 @@
-import config from '../../config'
-import Http from '../../services/Http'
+import {
+  getData,
+  putData,
+  postData,
+  deleteData
+} from '../../boot/axios'
 
 const setProductAction = async (store, obj) => {
   try {
@@ -8,8 +12,8 @@ const setProductAction = async (store, obj) => {
       return
     }
 
-    const url = config.apiPath + 'api/v1/product/' + obj.id
-    const { data } = await Http.getData(url)
+    const url = 'api/v1/product/' + obj.id
+    const { data } = await getData(url)
 
     if (Object.prototype.hasOwnProperty.call(data, 'id')) {
       store.commit('SET_PRODUCT_MUTATION', { dados: data })
@@ -21,8 +25,8 @@ const setProductAction = async (store, obj) => {
 
 const setListProductsAction = async (store, obj) => {
   try {
-    const url = config.apiPath + 'api/v1/products'
-    const { data } = await Http.getData(url)
+    const url = 'api/v1/products'
+    const { data } = await getData(url)
 
     if (Object.prototype.hasOwnProperty.call(data, 'list')) {
       store.commit('SET_LIST_PRODUCTS_MUTATION', { lista: data.list })
@@ -36,11 +40,11 @@ const setProductsInListAction = async (store, obj) => {
   try {
     if (Object.prototype.hasOwnProperty.call(obj, 'name') && obj.name) {
       if (Object.prototype.hasOwnProperty.call(obj, 'id') && obj.id) {
-        const url = config.apiPath + 'api/v1/product/' + obj.id
-        await Http.putData(url, obj)
+        const url = 'api/v1/product/' + obj.id
+        await putData(url, obj)
       } else {
-        const url = config.apiPath + 'api/v1/product'
-        await Http.postData(url, obj)
+        const url = 'api/v1/product'
+        await postData(url, obj)
       }
     }
   } catch (e) {
@@ -50,8 +54,8 @@ const setProductsInListAction = async (store, obj) => {
 
 const deleteProductAction = async (store, obj) => {
   try {
-    const url = config.apiPath + 'api/v1/product/' + store.state.product.id
-    await Http.deleteData(url).then(() => {
+    const url = 'api/v1/product/' + store.state.product.id
+    await deleteData(url).then(() => {
       store.commit('SET_PRODUCT_MUTATION', { dados: {} })
     }).catch((error) => {
       console.log(error)

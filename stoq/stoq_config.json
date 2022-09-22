@@ -1,5 +1,5 @@
 {
-    "srv_port": "8080",
+    "srv_port": "8081",
     "web_ui": false,
     "mode": "production",
     "dbconfig": {
