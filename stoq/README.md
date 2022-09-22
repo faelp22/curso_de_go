@@ -41,7 +41,10 @@ $ go build -o stoq cmd/stoq/main.go
 $ GOOS=windows GOARCH=amd64 go build -o stoq64.exe main.go
 
 # build modo production
-$ go build -ldflags "-s -w" . 
+$ go build -ldflags "-s -w" .
+# ou
+$ go build -ldflags "-s -w" cmd/stoq/main.go
+$ go build -ldflags "-s -w" -o stoq cmd/stoq/main.go
 ```
 ## Opções de execução
 - SRV_PORT (Porta padrão 8080)

@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
+	"runtime"
 	"strings"
 
 	"github.com/faelp22/tcs_curso/stoq/config"
@@ -61,10 +63,32 @@ func main() {
 	done := make(chan bool)
 	go srv.ListenAndServe()
 	log.Printf("Server Run on Port: %v, Mode: %v, DB-Driver: %v, WEBUI: %v", conf.SRV_PORT, conf.Mode, conf.DBConfig.DB_DRIVE, conf.WEB_UI)
+	open(fmt.Sprintf("http://localhost:%v", conf.SRV_PORT), conf)
 	<-done
 
 }
 
 func redirect(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/webui/", http.StatusMovedPermanently)
+}
+
+func open(url string, conf *config.Config) error {
+	var cmd string
+	var args []string
+
+	if !conf.OpenBrowser {
+		return nil
+	}
+
+	switch runtime.GOOS {
+	case "windows": // For Windows
+		cmd = "cmd"
+		args = []string{"/c", "start"}
+	case "darwin": // Mac OS
+		cmd = "open"
+	default: // For "linux", "freebsd", "openbsd", "netbsd"
+		cmd = "xdg-open"
+	}
+	args = append(args, url)
+	return exec.Command(cmd, args...).Start()
 }

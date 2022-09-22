@@ -1,6 +1,7 @@
 {
     "srv_port": "8081",
     "web_ui": false,
+    "open_browser": false,
     "mode": "production",
     "dbconfig": {
         "db_drive": "sqlite3",

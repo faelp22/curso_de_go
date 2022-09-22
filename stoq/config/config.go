@@ -12,10 +12,11 @@ const (
 )
 
 type Config struct {
-	SRV_PORT string `json:"srv_port"`
-	WEB_UI   bool   `json:"web_ui"`
-	Mode     string `json:"mode"`
-	DBConfig `json:"dbconfig"`
+	SRV_PORT    string `json:"srv_port"`
+	WEB_UI      bool   `json:"web_ui"`
+	Mode        string `json:"mode"`
+	OpenBrowser bool   `json:"open_browser"`
+	DBConfig    `json:"dbconfig"`
 }
 
 type DBConfig struct {
@@ -87,8 +88,9 @@ func NewConfig(confi *Config) *Config {
 
 func defaultConf() *Config {
 	default_conf := Config{
-		SRV_PORT: "8080",
-		WEB_UI:   true,
+		SRV_PORT:    "8080",
+		WEB_UI:      true,
+		OpenBrowser: true,
 		DBConfig: DBConfig{
 			DB_DRIVE: "sqlite3",
 			// DB_DRIVE: "postgres",
